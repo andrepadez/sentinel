@@ -1,0 +1,11 @@
+#! /usr/bin/env node
+
+var sentinel = require('../src')
+
+var args = process.argv.slice(2);
+
+if (args.indexOf('--notify-fail') !== -1) {
+  sentinel.notifyFail();
+} else {
+  sentinel.ci();
+}
