@@ -1,11 +1,13 @@
-#! /usr/bin/env node
+#!/usr/bin/env node
 
+var config = require('../config')
 var sentinel = require('../src')
+var args = process.argv.slice(2)
 
-var args = process.argv.slice(2);
+sentinel.init(config)
 
-if (args.indexOf('--notify-fail') !== -1) {
-  sentinel.notifyFail();
-} else {
-  sentinel.ci();
-}
+// if (args.indexOf('--notify-fail') !== -1) {
+//   sentinel.notifyFail();
+// } else {
+//   sentinel.ci();
+// }
