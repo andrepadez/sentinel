@@ -18,7 +18,7 @@ var Sentinel = module.exports = {
     }
     slack.init(config)
     github.init(config)
-    this.cli()
+    return this.cli()
   },
   cli: function(){
     var failedTests
@@ -33,7 +33,8 @@ var Sentinel = module.exports = {
           return github.makeDistribution()
         }
         if(failedTests){
-          process.exit(failedTests)
+          return slack.notify(failedTests, false)
+            .then(() => process.exit(failedTests))
         }
       })
       .then((buildSuccess) => slack.notify(failedTests, /*buildSuccess*/ true))
