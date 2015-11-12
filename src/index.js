@@ -4,24 +4,25 @@ var path = require('path')
 var fs = require('vigour-fs-promised')
 var exec = require('./utils/exec')
 
-// var slack = require('.integration/slack')
+var slack = require('./integration/slack')
 // var github = require('.integration/github')
 
 var Sentinel = module.exports = {
   init: function(config){
-    var pkg = this.pkg = require(path.join(config.dir,'package.json'))
+    var pkg = config.pkg = require(path.join(config.dir,'package.json'))
     config.sentinel = {}
     if(pkg && pkg.vigour && pkg.vigour.services && pkg.vigour.services.sentinel){
       config.sentinel = pkg.vigour.services.sentinel
     }
     this.config = config
+    slack.init(config)
     this.cli()
   },
   cli: function(){
     var config = Sentinel.config
     var failedTests
 
-    exec('gaston test', true, true)
+    exec(config.pkg.scripts.test, true, true)
       .then((code) => {
         console.log('success', code)
         failedTests = code
@@ -32,7 +33,7 @@ var Sentinel = module.exports = {
           // return github.doStuff()
         }
       })
-      // .then(() => slack.notify(failedTests))
+      .then((buildSuccess) => slack.notify(failedTests, /*buildSuccess*/ true))
       .catch((err) => {
         log.error('Sentinel', 'err', err)
         process.exit(1)

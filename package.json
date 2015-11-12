@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/vigour-io/sentinel#readme",
   "dependencies": {
+    "axios": "^0.7.0",
     "npmlog": "^2.0.0",
     "shelljs": "^0.5.3",
     "vigour-fs-promised": "^2.0.1"
