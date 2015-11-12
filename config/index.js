@@ -17,18 +17,18 @@ module.exports = {
 
 //Please keep this for local testing purposes
 
-// module.exports = {
-//   branch: 'master',
-//   repo: 'vigour-io/sentinel-test-private',
-//   buildId: '17616511',
-//   commit: 'de710c5fd61fa65b84ca16ee2e2dc52a123d00e7',
-//   result: undefined,
-//   dir: '/Users/andrepadez/develop/vigour-io/sentinel-test-private',
-//   slack: {
-//     webhook: process.env.SENTINEL_SLACK_WEBHOOK
-//   },
-//   github: {
-//     username: process.env.SENTINEL_GITHUB_USERNAME,
-//     password: process.env.SENTINEL_GITHUB_PASSWORD
-//   }
-// }
+module.exports = {
+  branch: 'master',
+  repo: 'vigour-io/sentinel-test-private',
+  buildId: '17616511',
+  commit: 'de710c5fd61fa65b84ca16ee2e2dc52a123d00e7',
+  result: undefined,
+  dir: '/Users/andrepadez/develop/vigour-io/sentinel-test-private',
+  slack: {
+    webhook: process.env.SENTINEL_SLACK_WEBHOOK
+  },
+  github: {
+    username: process.env.SENTINEL_GITHUB_USERNAME,
+    password: process.env.SENTINEL_GITHUB_PASSWORD
+  }
+}

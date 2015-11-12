@@ -32,6 +32,9 @@ var Sentinel = module.exports = {
         if(treatBranch && !failedTests){
           return github.makeDistribution()
         }
+        if(failedTests){
+          process.exit(failedTests)
+        }
       })
       .then((buildSuccess) => slack.notify(failedTests, /*buildSuccess*/ true))
       .catch((err) => {
