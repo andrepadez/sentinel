@@ -14,6 +14,9 @@ module.exports = {
 	}
 }
 
+
+//Please keep this for local testing purposes
+
 // module.exports = {
 //   branch: 'master',
 //   repo: 'vigour-io/sentinel-test-private',
