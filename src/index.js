@@ -29,7 +29,7 @@ var Sentinel = module.exports = {
         return ~config.sentinel.branches.indexOf(config.branch)
       })
       .then((treatBranch) => {
-        if(treatBranch){
+        if(treatBranch && !failedTests){
           return github.makeDistribution()
         }
       })
