@@ -1,6 +1,6 @@
-module.exports = {
+var config = module.exports = {
 	branch: process.env.TRAVIS_BRANCH,
-	repo: process.env.TRAVIS_REPO_SLUG,
+  repoSlug: process.env.TRAVIS_REPO_SLUG,
 	buildId: process.env.TRAVIS_BUILD_ID,
 	commit: process.env.TRAVIS_COMMIT,
 	result: process.env.TRAVIS_TEST_RESULT,
@@ -14,3 +14,8 @@ module.exports = {
 		password: process.env.SENTINEL_GITHUB_PASSWORD
 	}
 }
+
+var splitSlug = config.repoSlug.split('/')
+config.repoName = splitSlug.pop()
+config.repoOwner = splitSlug.pop()
+

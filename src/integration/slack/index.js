@@ -2,6 +2,7 @@ var path = require('path')
 var request = require('axios')
 var log = require('npmlog')
 var fs = require('vigour-fs-promised')
+var checkIfPublic = require('../github/check-if-public')
 var tmpdir = require('os').tmpdir()
 var checkFilePath = path.join(tmpdir, 'sentinel-notification-sent')
 var config
@@ -19,11 +20,10 @@ var Slack = module.exports = {
 
         var sConfig = config.sentinel
         var channel = getChannelName()
-        var attachment = getAttachment(failedTests, buildSuccess)
-
-        return sendNotification(channel, attachment)
+        return getAttachment(failedTests, buildSuccess)
+          .then((attachment) => sendNotification(channel, attachment))
           .then(() => log.info('Sentinel', 'Notification sent'))
-          .catch((err) => log.error('Sentinel', 'Notification failed', err))
+
       })
   }
 }
@@ -39,43 +39,55 @@ var sendNotification = function(channel, attachment){
     .then( writeFile )
 }
 
-var getAttachment = function(failedTests, buildSuccess){
+var getAttachment = function(failedTests, buildSuccess, isPublic){
   var success = buildSuccess && !failedTests
   var result = success? 'Succeeded' : 'Failed'
   var color = success ? 'good' : 'danger'
   var title = `Build #${config.buildNumber} ${result} (log)`
   var buildId = config.buildId
   var commit = config.commit
-  var repo = config.repo
-  var attachment = {
-    color: color,
-    title: title,
-    title_link: `https://magnum.travis-ci.com/${repo}/builds/${buildId}`,
-    fields: [
-      {
-        title: 'Branch',
-        value: config.branch
-      },
-      {
-        title: 'Commit',
-        value: `<https://github.com/${repo}/commit/${commit}|${commit.slice(0, 8)}>`
+  var repoSlug = config.repoSlug
+  var repoName = config.repoName
+
+  return checkIfPublic(repoSlug)
+    .then((isPublic) => {
+      var travisUrl
+      if(isPublic){
+        travisUrl = `https://travis-ci.org/${repoSlug}/builds/${buildId}`
+      } else {
+        travisUrl = `https://magnum.travis-ci.com/${repoName}/builds/${buildId}`
       }
-    ]
-  }
+      var travisUrl = isPublic? 'https://www.travis-ci.com/' : 'https://magnum.travis-ci.com/'
+      var attachment = {
+        color: color,
+        title: title,
+        title_link: travisUrl,
+        fields: [
+          {
+            title: 'Branch',
+            value: config.branch
+          },
+          {
+            title: 'Commit',
+            value: `<https://github.com/${repoName}/commit/${commit}|${commit.slice(0, 8)}>`
+          }
+        ]
+      }
 
-  if (!success) {
-    attachment.fields.unshift({
-      title: 'Reason',
-      value: failedTests? failedTests + ' tests failed' : ' check build log'
-    });
-  }
+      if (!success) {
+        attachment.fields.unshift({
+          title: 'Reason',
+          value: failedTests? failedTests + ' tests failed' : ' check build log'
+        });
+      }
 
-  return attachment
+      return attachment
+    })
 }
 
 var getChannelName = function(){
   var slackChannel = config.sentinel.slackChannel
-  return '#' + (slackChannel || config.repo.split('/').pop())
+  return '#' + (slackChannel || config.repoName)
 }
 
 var writeFile = function(){
