@@ -10,16 +10,10 @@ var Slack = module.exports = {
   notify: function(failedTests, buildSuccess){
     return fs.existsAsync('./notification-sent')
       .then((exists) => {
-<<<<<<< HEAD
-        // if(exists){
-        //   return
-        // }
-=======
         if(exists){
           return
         }
 
->>>>>>> develop
         var sConfig = config.sentinel
         var channel = getChannelName()
         var attachment = getAttachment(failedTests, buildSuccess)
