@@ -5,6 +5,7 @@ module.exports = {
 	commit: process.env.TRAVIS_COMMIT,
 	result: process.env.TRAVIS_TEST_RESULT,
 	dir: process.env.TRAVIS_BUILD_DIR,
+  buildNumber: process.env.TRAVIS_BUILD_NUMBER
 	slack: {
 		webhook: process.env.SENTINEL_SLACK_WEBHOOK
 	},
