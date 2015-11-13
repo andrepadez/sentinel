@@ -22,6 +22,7 @@ var Sentinel = module.exports = {
     return exec(config.pkg.scripts.test, true, true)
       .then((code) => {
         failedTests = code
+        config.sentinel.branches = config.sentinel.branches || []
         return  ~config.sentinel.branches.indexOf(config.branch)
       })
       .then((treatBranch) => {
