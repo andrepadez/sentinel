@@ -27,7 +27,10 @@ var pushChanges = function(){
   return exec(`git push ${remote} ${config.distBranch}`, true)
 }
 
-var addAndCommit = function(){
+var addAndCommit = function(changed){
+  if(!changed){
+    return
+  }
   log.info('Sentinel', 'adding and Committing changes')
   var commitMessage = `build for commit #${config.commit}`
   return exec('git add .', true)
@@ -43,6 +46,7 @@ var unignore = function(){
       var split = data.split('\n')
       var output = split.filter((line) => !~patterns.indexOf(line))
       return fs.writeFileAsync(filePath, output.join('\n'), 'utf8')
+        .then(() => output !== data)
     })
 }
 
