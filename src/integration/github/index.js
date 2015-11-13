@@ -14,8 +14,13 @@ module.exports = {
       .then(unignore)
       .then(addAndCommit)
       .then(pushChanges)
-      .then(() => console.log('GIT success'))
-      .catch((err) => console.log('GIT error', err))
+      .then(() => {
+        log.info('Sentinel', 'Published to distribution branch')
+        return true
+      })
+      .catch((err) => {
+        return log.error('Sentinel', 'Publishing to distribution branch failed')
+      })
   }
 }
 

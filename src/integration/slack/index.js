@@ -1,5 +1,5 @@
-"use strict";
 var request = require('axios')
+var log = require('npmlog')
 var fs = require('vigour-fs-promised')
 var config
 
@@ -10,15 +10,23 @@ var Slack = module.exports = {
   notify: function(failedTests, buildSuccess){
     return fs.existsAsync('./notification-sent')
       .then((exists) => {
+<<<<<<< HEAD
         // if(exists){
         //   return
         // }
+=======
+        if(exists){
+          return
+        }
+
+>>>>>>> develop
         var sConfig = config.sentinel
         var channel = getChannelName()
         var attachment = getAttachment(failedTests, buildSuccess)
+
         return sendNotification(channel, attachment)
-          .then(() => console.log('Sent Notification'))
-          .catch((err) => console.log('Failed Notification', err))
+          .then(() => log.info('Sentinel', 'Notification sent'))
+          .catch((err) => log.error('Sentinel', 'Notification failed', err))
       })
   }
 }
@@ -33,6 +41,7 @@ var sendNotification = function(channel, attachment){
   return request.post(slackUrl, payload)
     .then( writeFile )
 }
+
 var getAttachment = function(failedTests, buildSuccess){
   var success = buildSuccess && !failedTests
   var color = success ? 'good' : 'danger'

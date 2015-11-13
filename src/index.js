@@ -18,7 +18,10 @@ var Sentinel = module.exports = {
     }
     slack.init(config)
     github.init(config)
+<<<<<<< HEAD
     return this.cli()
+=======
+>>>>>>> develop
   },
   cli: function(){
     var failedTests
@@ -26,18 +29,25 @@ var Sentinel = module.exports = {
     exec(config.pkg.scripts.test, true, true)
       .then((code) => {
         failedTests = code
-        return ~config.sentinel.branches.indexOf(config.branch)
+        return  ~config.sentinel.branches.indexOf(config.branch)
       })
       .then((treatBranch) => {
         if(treatBranch && !failedTests){
           return github.makeDistribution()
         }
+<<<<<<< HEAD
         if(failedTests){
           return slack.notify(failedTests, false)
             .then(() => process.exit(failedTests))
         }
       })
       .then((buildSuccess) => slack.notify(failedTests, /*buildSuccess*/ true))
+=======
+
+        return true
+      })
+      .then((buildSuccess) => slack.notify(failedTests, buildSuccess))
+>>>>>>> develop
       .catch((err) => {
         log.error('Sentinel', 'err', err)
         process.exit(1)
