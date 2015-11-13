@@ -57,7 +57,6 @@ var getAttachment = function(failedTests, buildSuccess, isPublic){
       } else {
         travisUrl = `https://magnum.travis-ci.com/${repoName}/builds/${buildId}`
       }
-      var travisUrl = isPublic? 'https://www.travis-ci.com/' : 'https://magnum.travis-ci.com/'
       var attachment = {
         color: color,
         title: title,
