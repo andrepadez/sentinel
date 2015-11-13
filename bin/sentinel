@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var config = require('../config')
+var config = require('../config/')
 var sentinel = require('../src')
 var slackIntegration = require('../src/integration/slack/')
 var args = process.argv.slice(2)
