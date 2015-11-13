@@ -18,9 +18,6 @@ module.exports = {
         log.info('Sentinel', 'Published to distribution branch')
         return true
       })
-      .catch((err) => {
-        return log.error('Sentinel', 'Publishing to distribution branch failed')
-      })
   }
 }
 
