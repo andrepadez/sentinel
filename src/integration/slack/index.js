@@ -41,8 +41,9 @@ var sendNotification = function(channel, attachment){
 
 var getAttachment = function(failedTests, buildSuccess){
   var success = buildSuccess && !failedTests
+  var result = success? 'Succeeded' : 'Failed'
   var color = success ? 'good' : 'danger'
-  var title = `#${config.buildNumber}` + (success ? 'Build Passing' : 'Build Failing') + ' (log)'
+  var title = `Build #${config.buildNumber} ${result} (log)`
   var buildId = config.buildId
   var commit = config.commit
   var repo = config.repo
