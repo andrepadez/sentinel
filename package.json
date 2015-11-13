@@ -1,6 +1,6 @@
 {
   "name": "vigour-sentinel",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "description": "Continuos Testing & Delivery Agent for vigour projects",
   "preferGlobal": "true",
   "main": "src/index.js",
