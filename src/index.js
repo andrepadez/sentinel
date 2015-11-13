@@ -22,7 +22,7 @@ var Sentinel = module.exports = {
   cli: function(){
     var failedTests
 
-    exec(config.pkg.scripts.test, true, true)
+    return exec(config.pkg.scripts.test, true, true)
       .then((code) => {
         failedTests = code
         return  ~config.sentinel.branches.indexOf(config.branch)
