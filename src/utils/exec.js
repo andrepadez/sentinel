@@ -26,6 +26,9 @@ module.exports = function(command, verbose, forceResolve){
         reject(errorMessage)
       }
     })
-    spawned.on('error', () => reject(errorMessage))
+    spawned.on('error', () => {
+      console.log(require('util').inspect(command, { depth: null }));
+      reject(errorMessage)}
+    )
   })
 }
