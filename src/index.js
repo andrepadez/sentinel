@@ -12,10 +12,7 @@ var Sentinel = module.exports = {
   init: function(cfg){
     config = cfg
     var pkg = config.pkg = require(path.join(config.dir,'package.json'))
-    config.sentinel = {}
-    if(pkg && pkg.vigour && pkg.vigour.services && pkg.vigour.services.sentinel){
-      config.sentinel = pkg.vigour.services.sentinel
-    }
+    config.sentinel = pkg.sentinel || {}
     slack.init(config)
     github.init(config)
   },
