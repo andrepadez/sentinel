@@ -45,7 +45,8 @@ var unignore = function(){
     .then((data) => {
       var split = data.split('\n')
       var output = split.filter((line) => !~patterns.indexOf(line))
-      return fs.writeFileAsync(filePath, output.join('\n'), 'utf8')
+      output = output.join('\n')
+      return fs.writeFileAsync(filePath, output, 'utf8')
         .then(() => output !== data)
     })
 }
