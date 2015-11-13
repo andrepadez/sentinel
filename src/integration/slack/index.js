@@ -1,6 +1,9 @@
+var path = require('path')
 var request = require('axios')
 var log = require('npmlog')
 var fs = require('vigour-fs-promised')
+var tmpdir = require('os').tmpdir()
+var checkFilePath = path.join(tmpdir, 'sentinel-notification-sent')
 var config
 
 var Slack = module.exports = {
@@ -8,7 +11,7 @@ var Slack = module.exports = {
     config = cfg
   },
   notify: function(failedTests, buildSuccess){
-    return fs.existsAsync('./notification-sent')
+    return fs.existsAsync(checkFilePath)
       .then((exists) => {
         if(exists){
           return
@@ -75,9 +78,5 @@ var getChannelName = function(){
 }
 
 var writeFile = function(){
-  return fs.writeFileAsync('./notification-sent', 'done', 'utf8')
-}
-
-var deleteFile = function(){
-  return fs.unlinkAsync('./notification-sent')
+  return fs.writeFileAsync(checkFilePath, 'done', 'utf8')
 }
