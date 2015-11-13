@@ -4,7 +4,6 @@ var spawn = require('child_process').spawn
 
 module.exports = function(command, verbose, forceResolve){
   return new Promise((resolve, reject) => {
-    // verbose = true //[TODO] delete this line
     var errorMessage = `error executing cmd: '${command}'`
 
     var args
