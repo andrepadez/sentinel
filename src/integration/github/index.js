@@ -27,14 +27,11 @@ var pushChanges = function(){
   return exec(`git push ${remote} ${config.distBranch}`, true)
 }
 
-var addAndCommit = function(changed){
-  if(!changed){
-    return
-  }
+var addAndCommit = function(){
   log.info('Sentinel', 'adding and Committing changes')
   var commitMessage = `build for commit #${config.commit}`
   return exec('git add .', true)
-    .then(() => exec( {cmd: 'git', args: ['commit', '-m', `"${commitMessage}"`] }, true))
+    .then(() => exec( {cmd: 'git', args: ['commit', '-m', `"${commitMessage}"`] }, true, true))
 }
 
 var unignore = function(){
@@ -47,7 +44,6 @@ var unignore = function(){
       var output = split.filter((line) => !~patterns.indexOf(line))
       output = output.join('\n')
       return fs.writeFileAsync(filePath, output, 'utf8')
-        .then(() => output !== data)
     })
 }
 
