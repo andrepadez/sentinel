@@ -9,7 +9,8 @@
   },
   "scripts": {
     "start": "./bin/sentinel",
-    "lint": "./node_modules/.bin/standard"
+    "lint": "./node_modules/.bin/standard",
+    "prepublish": "npm run lint"
   },
   "repository": {
     "type": "git",
