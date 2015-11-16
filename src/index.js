@@ -22,7 +22,7 @@ var Sentinel = module.exports = {
   cli: function(){
     var failedTests
 
-    exec(config.pkg.scripts.test, true, true)
+    exec(config.pkg.scripts.test, true, false)
       .then((code) => {
         failedTests = code
         return  ~config.sentinel.branches.indexOf(config.branch)
@@ -37,7 +37,7 @@ var Sentinel = module.exports = {
       .then((buildSuccess) => slack.notify(failedTests, buildSuccess))
       .catch((err) => {
         log.error('Sentinel', 'err', err)
-        process.exit(1)
+        process.exitCode = 1
       })
   }
 }
