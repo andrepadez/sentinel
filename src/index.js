@@ -48,6 +48,7 @@ var Sentinel = module.exports = {
     var checkFilePath = slack.checkFilePath
     return fs.existsAsync(checkFilePath)
       .then((exists) => {
+        console.log('exists', exists, checkFilePath)
         if(exists){
           return fs.readFileAsync(checkFilePath, 'utf8')
             .then((data) => {
