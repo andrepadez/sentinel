@@ -34,7 +34,10 @@ var Sentinel = module.exports = {
       })
       .then((buildSuccess) => {
         slack.notify(failedTests, buildSuccess)
-          .then(() => process.exit(failedTests))
+          .then(() => {
+            console.log('exiting with code', failedTests)
+            process.exit(failedTests)
+          })
       })
       .catch((err) => {
         log.error('Sentinel', 'err', err)
