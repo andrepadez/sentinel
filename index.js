@@ -8,9 +8,13 @@ var args = process.argv.slice(2)
 sentinel.init(config)
 
 if (args.indexOf('--notify-fail') !== -1) {
-  slackIntegration.init(config)
-  slackIntegration.notify(0, false)
+  sentinel.notifyFail()
+    .catch(errorHandler)
 } else {
   sentinel.cli()
-    .catch((err) => log.error('Sentinel', 'CLI process failed', err))
+    .catch(errorHandler)
+}
+
+function errorHandler(){
+  log.error('Sentinel', 'CLI process failed', err)
 }

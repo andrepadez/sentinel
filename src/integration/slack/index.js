@@ -8,23 +8,17 @@ var checkFilePath = path.join(tmpdir, 'sentinel-notification-sent')
 var config
 
 var Slack = module.exports = {
+  checkFilePath: checkFilePath,
   init: function(cfg){
     config = cfg
   },
   notify: function(failedTests, buildSuccess){
-    return fs.existsAsync(checkFilePath)
-      .then((exists) => {
-        if(exists){
-          return
-        }
-
-        var sConfig = config.sentinel
-        var channel = getChannelName()
-        return getAttachment(failedTests, buildSuccess)
-          .then((attachment) => sendNotification(channel, attachment))
-          .then(() => log.info('Sentinel', 'Notification sent'))
-
-      })
+    var sConfig = config.sentinel
+    var channel = getChannelName()
+    return getAttachment(failedTests, buildSuccess)
+      .then((attachment) => sendNotification(channel, attachment))
+      .then( () => writeFile(failedTests) )
+      .then(() => log.info('Sentinel', 'Notification sent'))
   }
 }
 
@@ -34,9 +28,7 @@ var sendNotification = function(channel, attachment){
     attachments: [attachment],
     channel: channel
   }
-
   return request.post(slackUrl, payload)
-    .then( writeFile )
 }
 
 var getAttachment = function(failedTests, buildSuccess, isPublic){
@@ -89,6 +81,7 @@ var getChannelName = function(){
   return '#' + (slackChannel || config.repoName)
 }
 
-var writeFile = function(){
-  return fs.writeFileAsync(checkFilePath, 'done', 'utf8')
+var writeFile = function(failedTests){
+  console.log('writing', failedTests, 'to', checkFilePath)
+  return fs.writeFileAsync(checkFilePath, failedTests, 'utf8')
 }

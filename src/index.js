@@ -43,5 +43,17 @@ var Sentinel = module.exports = {
         log.error('Sentinel', 'err', err)
         process.exitCode = 1
       })
+  },
+  notifyFail: function(){
+    var checkFilePath = slack.checkFilePath
+    return fs.existsAsync(checkFilePath)
+      .then((exists) => {
+        if(exists){
+          return fs.readFileAsync(checkFilePath, 'utf8')
+            .then((data) => process.exit(parseInt(data, 10)))
+        } else {
+          return slack.notify(0, false)
+        }
+      })
   }
 }
