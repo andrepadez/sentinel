@@ -8,7 +8,8 @@
     "sentinel": "bin/sentinel"
   },
   "scripts": {
-    "start": "./bin/sentinel"
+    "start": "./bin/sentinel",
+    "lint": "./node_modules/.bin/standard"
   },
   "repository": {
     "type": "git",
@@ -25,5 +26,8 @@
     "npmlog": "^2.0.0",
     "shelljs": "^0.5.3",
     "vigour-fs-promised": "^2.0.1"
+  },
+  "devDependencies": {
+    "standard": "^5.3.1"
   }
 }
