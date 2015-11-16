@@ -44,11 +44,13 @@ var getAttachment = function(failedTests, buildSuccess, isPublic){
   return checkIfPublic(repoSlug)
     .then((isPublic) => {
       var travisUrl
+      
       if(isPublic){
         travisUrl = `https://travis-ci.org/${repoSlug}/builds/${buildId}`
       } else {
         travisUrl = `https://magnum.travis-ci.com/${repoSlug}/builds/${buildId}`
       }
+
       var attachment = {
         color: color,
         title: title,
@@ -65,11 +67,18 @@ var getAttachment = function(failedTests, buildSuccess, isPublic){
         ]
       }
 
+      if (config.nodeVersion) {
+        attachment.fields.unshift({
+          title: 'Node Version',
+          value: config.nodeVersion
+        })
+      }
+
       if (!success) {
         attachment.fields.unshift({
           title: 'Reason',
           value: failedTests? failedTests + ' tests failed' : ' check build log'
-        });
+        })
       }
 
       return attachment

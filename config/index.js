@@ -6,6 +6,7 @@ var config = module.exports = {
 	result: process.env.TRAVIS_TEST_RESULT,
 	dir: process.env.TRAVIS_BUILD_DIR,
   buildNumber: process.env.TRAVIS_BUILD_NUMBER,
+	nodeVersion: process.env.TRAVIS_NODE_VERSION,
 	slack: {
 		webhook: process.env.SENTINEL_SLACK_WEBHOOK
 	},
@@ -18,4 +19,3 @@ var config = module.exports = {
 var splitSlug = config.repoSlug.split('/')
 config.repoName = splitSlug.pop()
 config.repoOwner = splitSlug.pop()
-
