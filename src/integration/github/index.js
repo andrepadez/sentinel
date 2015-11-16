@@ -5,10 +5,10 @@ var exec = require('../../utils/exec')
 var config
 
 module.exports = {
-  init: function(cfg){
+  init: function (cfg) {
     config = cfg
   },
-  makeDistribution: function(){
+  makeDistribution: function () {
     return fetchAndMerge()
       .then(() => exec(config.pkg.scripts.build))
       .then(unignore)
@@ -21,20 +21,20 @@ module.exports = {
   }
 }
 
-var pushChanges = function(){
+var pushChanges = function () {
   var remote = config.remote || 'origin'
   log.info('Sentinel', `pushing changes to ${remote}`)
   return exec(`git push ${remote} ${config.distBranch}`, true)
 }
 
-var addAndCommit = function(){
+var addAndCommit = function () {
   log.info('Sentinel', 'adding and Committing changes')
   var commitMessage = `build for commit #${config.commit}`
   return exec('git add .', true)
-    .then(() => exec( {cmd: 'git', args: ['commit', '-m', `"${commitMessage}"`] }, true, true))
+    .then(() => exec({cmd: 'git', args: ['commit', '-m', `"${commitMessage}"`]}, true, true))
 }
 
-var unignore = function(){
+var unignore = function () {
   log.info('Sentinel', 'unignoring build files')
   var filePath = `${config.dir}/.gitignore`
   var patterns = config.sentinel.unignore || ['build.*']
@@ -47,7 +47,7 @@ var unignore = function(){
     })
 }
 
-var fetchAndMerge = function(){
+var fetchAndMerge = function () {
   var remote = config.remote || 'origin'
   var distBranch = config.distBranch = config.branch + '-dist'
   var fetchCommand = `git config remote.${remote}.fetch +refs/heads/*:refs/remotes/${remote}/*`

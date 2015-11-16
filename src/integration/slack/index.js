@@ -7,22 +7,21 @@ var tmpdir = require('os').tmpdir()
 var checkFilePath = path.join(tmpdir, 'sentinel-notification-sent')
 var config
 
-var Slack = module.exports = {
+module.exports = {
   checkFilePath: checkFilePath,
-  init: function(cfg){
+  init: function (cfg) {
     config = cfg
   },
-  notify: function(failedTests, buildSuccess){
-    var sConfig = config.sentinel
+  notify: function (failedTests, buildSuccess) {
     var channel = getChannelName()
     return getAttachment(failedTests, buildSuccess)
       .then((attachment) => sendNotification(channel, attachment))
-      .then( () => writeFile(failedTests) )
+      .then(() => writeFile(failedTests))
       .then(() => log.info('Sentinel', 'Notification sent'))
   }
 }
 
-var sendNotification = function(channel, attachment){
+var sendNotification = function (channel, attachment) {
   var slackUrl = config.slack.webhook
   var payload = {
     attachments: [attachment],
@@ -31,9 +30,9 @@ var sendNotification = function(channel, attachment){
   return request.post(slackUrl, payload)
 }
 
-var getAttachment = function(failedTests, buildSuccess, isPublic){
+var getAttachment = function (failedTests, buildSuccess, isPublic) {
   var success = buildSuccess && !failedTests
-  var result = success? 'Succeeded' : 'Failed'
+  var result = success ? 'Succeeded' : 'Failed'
   var color = success ? 'good' : 'danger'
   var title = `Build #${config.buildNumber} ${result} (log)`
   var buildId = config.buildId
@@ -44,8 +43,8 @@ var getAttachment = function(failedTests, buildSuccess, isPublic){
   return checkIfPublic(repoSlug)
     .then((isPublic) => {
       var travisUrl
-      
-      if(isPublic){
+
+      if (isPublic) {
         travisUrl = `https://travis-ci.org/${repoSlug}/builds/${buildId}`
       } else {
         travisUrl = `https://magnum.travis-ci.com/${repoSlug}/builds/${buildId}`
@@ -77,7 +76,7 @@ var getAttachment = function(failedTests, buildSuccess, isPublic){
       if (!success) {
         attachment.fields.unshift({
           title: 'Reason',
-          value: failedTests? failedTests + ' tests failed' : ' check build log'
+          value: failedTests ? failedTests + ' tests failed' : ' check build log'
         })
       }
 
@@ -85,11 +84,11 @@ var getAttachment = function(failedTests, buildSuccess, isPublic){
     })
 }
 
-var getChannelName = function(){
+var getChannelName = function () {
   var slackChannel = config.sentinel.slackChannel
   return '#' + (slackChannel || config.repoName)
 }
 
-var writeFile = function(failedTests){
+var writeFile = function (failedTests) {
   return fs.writeFileAsync(checkFilePath, failedTests, 'utf8')
 }
