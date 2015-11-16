@@ -34,26 +34,17 @@ var Sentinel = module.exports = {
       })
       .then((buildSuccess) => {
         slack.notify(failedTests, buildSuccess)
-          .then(() => {
-            console.log('exiting with code', failedTests)
-            process.exit(failedTests)
-          })
-      })
-      .catch((err) => {
-        log.error('Sentinel', 'err', err)
-        process.exitCode = 1
+          .then(() => process.exit(failedTests))
       })
   },
   notifyFail: function(){
     var checkFilePath = slack.checkFilePath
     return fs.existsAsync(checkFilePath)
       .then((exists) => {
-        console.log('exists', exists, checkFilePath)
         if(exists){
           return fs.readFileAsync(checkFilePath, 'utf8')
             .then((data) => {
               var code = parseInt(data, 10)
-              console.log('notify-fail exiting with code', code)
               process.exit(code)
             })
         } else {

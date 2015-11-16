@@ -82,6 +82,5 @@ var getChannelName = function(){
 }
 
 var writeFile = function(failedTests){
-  console.log('writing', failedTests, 'to', checkFilePath)
   return fs.writeFileAsync(checkFilePath, failedTests, 'utf8')
 }

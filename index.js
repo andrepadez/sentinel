@@ -1,5 +1,3 @@
-console.log('in index.js')
-
 var config = require('./config')
 var sentinel = require('./src')
 var slackIntegration = require('./src/integration/slack/')

@@ -20,7 +20,6 @@ module.exports = function(command, verbose, forceResolve){
     var spawned = spawn(cmd, args, { stdio: stdio})
     spawned.on('exit', function(code){
       if(code === 0 || forceResolve){
-        console.log('forcing resolve with code', code)
         resolve(code)
       } else {
         reject(errorMessage)
