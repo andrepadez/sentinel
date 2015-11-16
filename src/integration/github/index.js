@@ -18,23 +18,20 @@ module.exports = {
         log.info('Sentinel', 'Published to distribution branch')
         return true
       })
-      .catch((err) => {
-        return log.error('Sentinel', 'Publishing to distribution branch failed')
-      })
   }
 }
 
 var pushChanges = function(){
   var remote = config.remote || 'origin'
   log.info('Sentinel', `pushing changes to ${remote}`)
-  return exec(`git push ${remote} ${config.distBranch}`)
+  return exec(`git push ${remote} ${config.distBranch}`, true)
 }
 
 var addAndCommit = function(){
   log.info('Sentinel', 'adding and Committing changes')
   var commitMessage = `build for commit #${config.commit}`
-  return exec('git add .')
-    .then(() => exec( {cmd: 'git', args: ['commit', '-m', `"${commitMessage}"`] }))
+  return exec('git add .', true)
+    .then(() => exec( {cmd: 'git', args: ['commit', '-m', `"${commitMessage}"`] }, true, true))
 }
 
 var unignore = function(){
@@ -45,7 +42,8 @@ var unignore = function(){
     .then((data) => {
       var split = data.split('\n')
       var output = split.filter((line) => !~patterns.indexOf(line))
-      return fs.writeFileAsync(filePath, output.join('\n'), 'utf8')
+      output = output.join('\n')
+      return fs.writeFileAsync(filePath, output, 'utf8')
     })
 }
 
@@ -54,20 +52,20 @@ var fetchAndMerge = function(){
   var distBranch = config.distBranch = config.branch + '-dist'
   var fetchCommand = `git config remote.${remote}.fetch +refs/heads/*:refs/remotes/${remote}/*`
   log.info('Sentinel', 'Changing git config to fetch all branches')
-  return exec(fetchCommand)
+  return exec(fetchCommand, true)
     .then(() => {
       log.info('Sentinel', 'fetching all branches')
-      return exec(`git fetch ${remote} ${distBranch}`)
+      return exec(`git fetch ${remote} ${distBranch}`, true)
     })
     .then(() => {
-      log.info('Sentinel', `Checking Out local branch ${distBranch}`)
-      return exec(`git checkout ${distBranch}`)
+      log.info('Sentinel', `Checking Out local branch ${distBranch}`, true)
+      return exec(`git checkout ${distBranch}`, true)
     }, () => {
-      log.info('Sentinel', `Creating and Checking Out local branch ${distBranch}`)
-      return exec(`git checkout -b ${distBranch}`)
+      log.info('Sentinel', `Creating and Checking Out local branch ${distBranch}`, true)
+      return exec(`git checkout -b ${distBranch}`, true)
     })
     .then(() => {
-      log.info('Sentinel', `Merging from ${config.branch}`)
-      return exec(`git merge ${config.branch}`)
+      log.info('Sentinel', `Merging from ${config.branch}`, true)
+      return exec(`git merge ${config.branch}`, true)
     })
 }

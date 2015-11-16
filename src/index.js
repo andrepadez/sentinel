@@ -12,19 +12,17 @@ var Sentinel = module.exports = {
   init: function(cfg){
     config = cfg
     var pkg = config.pkg = require(path.join(config.dir,'package.json'))
-    config.sentinel = {}
-    if(pkg && pkg.vigour && pkg.vigour.services && pkg.vigour.services.sentinel){
-      config.sentinel = pkg.vigour.services.sentinel
-    }
+    config.sentinel = pkg.sentinel || {}
     slack.init(config)
     github.init(config)
   },
   cli: function(){
     var failedTests
 
-    exec(config.pkg.scripts.test, true, false)
+    return exec(config.pkg.scripts.test, true, false)
       .then((code) => {
         failedTests = code
+        config.sentinel.branches = config.sentinel.branches || []
         return  ~config.sentinel.branches.indexOf(config.branch)
       })
       .then((treatBranch) => {
@@ -34,7 +32,10 @@ var Sentinel = module.exports = {
 
         return true
       })
-      .then((buildSuccess) => slack.notify(failedTests, buildSuccess))
+      .then((buildSuccess) => {
+        slack.notify(failedTests, buildSuccess)
+          .then(() => process.exit(failedTests))
+      })
       .catch((err) => {
         log.error('Sentinel', 'err', err)
         process.exitCode = 1
