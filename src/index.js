@@ -50,7 +50,11 @@ var Sentinel = module.exports = {
       .then((exists) => {
         if(exists){
           return fs.readFileAsync(checkFilePath, 'utf8')
-            .then((data) => process.exit(parseInt(data, 10)))
+            .then((data) => {
+              var code = parseInt(data, 10)
+              console.log('notify-fail exiting with code', code)
+              process.exit(code)
+            })
         } else {
           return slack.notify(0, false)
         }
