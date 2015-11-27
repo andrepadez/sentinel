@@ -27,7 +27,8 @@ First, you need to know whether your repository is private or public because Tra
   3. Select your repository in your account settings inside Travis.
   4. Go to the repository settings in Travis and provide `SENTINEL_SLACK_WEBHOOK` environment variable. **IMPORTANT!** this must be set as private/hidden/sensitive.
   5. create a `.travis.yml` file with the following configuration:
-  ```yml
+
+```yml
   language: node_js
   node_js:
     - "5.0.0" #all the versions you want to be tested
@@ -46,4 +47,4 @@ First, you need to know whether your repository is private or public because Tra
   sudo: required
   services:
     - docker
-  ```
+```
