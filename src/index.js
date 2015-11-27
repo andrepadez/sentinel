@@ -4,7 +4,6 @@ var exec = require('./utils/exec')
 var config
 
 var slack = require('./integration/slack')
-var github = require('./integration/github')
 
 module.exports = {
   init: function (cfg) {
@@ -12,7 +11,6 @@ module.exports = {
     var pkg = config.pkg = require(path.join(config.dir, 'package.json'))
     config.sentinel = pkg.sentinel || {}
     slack.init(config)
-    github.init(config)
   },
 
   cli: function () {
@@ -21,18 +19,13 @@ module.exports = {
     return exec(config.pkg.scripts.test, true, true)
       .then((code) => {
         failedTests = code
-        config.sentinel.branches = config.sentinel.branches || []
-        return ~config.sentinel.branches.indexOf(config.branch)
-      })
-      .then((treatBranch) => {
-        if (treatBranch && !failedTests) {
-          return github.makeDistribution()
+        if (config.pkg.scripts.build) {
+          return exec(config.pkg.scripts.build, true)
         }
-
-        return true
+        return 0
       })
-      .then((buildSuccess) => {
-        slack.notify(failedTests, buildSuccess)
+      .then((code) => {
+        slack.notify(failedTests, !code)
           .then(() => process.exit(failedTests))
       })
   },

@@ -2,7 +2,7 @@ var path = require('path')
 var request = require('axios')
 var log = require('npmlog')
 var fs = require('vigour-fs-promised')
-var checkIfPublic = require('../github/check-if-public')
+var checkIfPublic = require('../../utils/check-if-public-repo')
 var tmpdir = require('os').tmpdir()
 var checkFilePath = path.join(tmpdir, 'sentinel-notification-sent')
 var config
