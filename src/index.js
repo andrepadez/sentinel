@@ -19,10 +19,10 @@ module.exports = {
     return exec(config.pkg.scripts.test, true, true)
       .then((code) => {
         failedTests = code
-        if (config.pkg.scripts.build) {
+        if (!code && config.pkg.scripts.build) {
           return exec(config.pkg.scripts.build, true)
         }
-        return 0
+        return code
       })
       .then((code) => {
         slack.notify(failedTests, !code)
