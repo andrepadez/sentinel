@@ -1,2 +1,7 @@
 #!/usr/bin/env node
+var path = require('path')
+var log = require('npmlog')
+var version = require(path.join(__dirname, '..', 'package.json')).version
+log.info('sentinel', 'version', version)
+
 require('../index')
