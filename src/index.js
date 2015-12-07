@@ -26,6 +26,7 @@ module.exports = {
       })
       .then((code) => {
         slack.notify(failedTests, !code)
+          .then(() => require('npmlog').info('sentinel', 'exiting with code', failedTests))
           .then(() => process.exit(failedTests))
       })
   },
