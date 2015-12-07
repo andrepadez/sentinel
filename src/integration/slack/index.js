@@ -22,7 +22,7 @@ module.exports = {
 }
 
 var sendNotification = function (channel, attachment) {
-  console.log('sending to channel': channel)
+  console.log('sending to channel', channel)
   var slackUrl = config.slack.webhook
   var payload = {
     attachments: [attachment],
