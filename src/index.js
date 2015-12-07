@@ -1,5 +1,6 @@
 var path = require('path')
 var fs = require('vigour-fs-promised')
+var log = require('npmlog')
 var exec = require('./utils/exec')
 var config
 
@@ -26,7 +27,7 @@ module.exports = {
       })
       .then((code) => {
         slack.notify(failedTests, !code)
-          .then(() => require('npmlog').info('sentinel', 'exiting with code', failedTests))
+          .then(() => log.info('sentinel', 'exiting with code', failedTests))
           .then(() => process.exit(failedTests))
       })
   },
@@ -39,6 +40,7 @@ module.exports = {
           return fs.readFileAsync(checkFilePath, 'utf8')
             .then((data) => {
               var code = parseInt(data, 10)
+              log.info('sentinel', 'is this where it exits?', code)
               process.exit(code)
             })
         } else {
