@@ -25,11 +25,10 @@ module.exports = {
         }
         return code
       })
-      .then((code) => {
-        slack.notify(failedTests, !code)
-          .then(() => log.info('sentinel', 'exiting with code', failedTests))
-          .then(() => process.exit(failedTests))
-      })
+      .then((code) => slack.notify(failedTests, !code))
+      .then(() => log.info('sentinel', 'exiting with code', failedTests))
+      .then(() => process.exit(failedTests))
+      .catch((err) => log.info('sentinel', 'exiting in catch cli', err))
   },
 
   notifyFail: function () {
@@ -47,5 +46,6 @@ module.exports = {
           return slack.notify(0, false)
         }
       })
+      .catch((err) => log.info('sentinel', 'exiting in catch notifyFail', err))
   }
 }
