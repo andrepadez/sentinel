@@ -28,6 +28,7 @@ var sendNotification = function (channel, attachment) {
     attachments: [attachment],
     channel: channel
   }
+  console.log('slackUrl', slackUrl)
   return request.post(slackUrl, payload)
 }
 
