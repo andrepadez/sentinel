@@ -22,13 +22,17 @@ module.exports = {
 }
 
 var sendNotification = function (channel, attachment) {
-  console.log('sending to channel', channel)
+  log.info('Sentinel', 'sending notification to channel', channel)
   var slackUrl = config.slack.webhook
+  if (!slackUrl) {
+    log.warn('Sentinel', 'don\'t forget to set up the Environment variable SENTINEL_SLACK_WEBHOOK on travis')
+    return Promise.reject()
+  }
   var payload = {
     attachments: [attachment],
     channel: channel
   }
-  console.log('slackUrl', slackUrl)
+
   return request.post(slackUrl, payload)
 }
 
