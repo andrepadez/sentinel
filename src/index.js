@@ -28,7 +28,7 @@ module.exports = {
       .then((code) => slack.notify(failedTests, !code))
       .then(() => log.info('sentinel', 'exiting with code', failedTests))
       .then(() => process.exit(failedTests))
-      .catch((err) => log.info('sentinel', 'exiting in catch cli', err))
+      .catch((err) => console.error('sentinel', 'exiting in catch cli', err.stack))
   },
 
   notifyFail: function () {
