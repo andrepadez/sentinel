@@ -29,12 +29,12 @@ module.exports = {
       .then(() => log.info('sentinel', 'exiting with code', failedTests))
       .then(() => process.exit(failedTests))
       .catch((err) => {
-        console.error('sentinel', 'exiting in catch cli', err.stack)
-        process.exit(255)
+        return slack.notify(0, 255)
+          .then(() => process.exit(255))
       })
   },
 
-  notifyFail: function () {
+  notifyFail: function (code) {
     var checkFilePath = slack.checkFilePath
     return fs.existsAsync(checkFilePath)
       .then((exists) => {
@@ -49,6 +49,5 @@ module.exports = {
           return slack.notify(0, false)
         }
       })
-      .catch((err) => log.info('sentinel', 'exiting in catch notifyFail', err))
   }
 }
