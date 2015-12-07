@@ -1,4 +1,5 @@
 var config = require('./config')
+var fs = require('vigour-fs-promised')
 var log = require('npmlog')
 var sentinel = require('./src')
 var slack = require('./src/integration/slack')
@@ -16,6 +17,6 @@ if (args.indexOf('--notify-fail') !== -1) {
 
 function errorHandler (err) {
   log.error('Sentinel', 'CLI process failed', err)
-  return fs.writeFile(slack.checkFilePath, 255, 'utf8')
+  return fs.writeFileAsync(slack.checkFilePath, 255, 'utf8')
     .then(() => process.exit(255))
 }
