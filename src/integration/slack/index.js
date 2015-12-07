@@ -50,6 +50,8 @@ var getAttachment = function (failedTests, buildSuccess, isPublic) {
         travisUrl = `https://magnum.travis-ci.com/${repoSlug}/builds/${buildId}`
       }
 
+      log.info('sentinel', 'travisUrl', travisUrl)
+
       var attachment = {
         color: color,
         title: title,
