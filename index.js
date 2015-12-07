@@ -1,6 +1,7 @@
 var config = require('./config')
 var log = require('npmlog')
 var sentinel = require('./src')
+var slack = require('./src/integration/slack')
 var args = process.argv.slice(2)
 
 sentinel.init(config)
@@ -15,5 +16,6 @@ if (args.indexOf('--notify-fail') !== -1) {
 
 function errorHandler (err) {
   log.error('Sentinel', 'CLI process failed', err)
-  process.exit(255)
+  return fs.writeFile(slack.checkFilePath, 255, 'utf8')
+    .then(() => process.exit(255))
 }
