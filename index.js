@@ -15,4 +15,5 @@ if (args.indexOf('--notify-fail') !== -1) {
 
 function errorHandler (err) {
   log.error('Sentinel', 'CLI process failed', err)
+  process.exit(255)
 }
