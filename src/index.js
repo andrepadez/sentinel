@@ -43,7 +43,10 @@ module.exports = {
             .then((data) => {
               var code = parseInt(data, 10)
               log.info('sentinel', 'is this where it exits?', code)
-              process.exit(code)
+              if (code === 255) {
+                return slack.notify(0, true)
+                  .then(() => process.exit(code))
+              }
             })
         } else {
           return slack.notify(0, false)
