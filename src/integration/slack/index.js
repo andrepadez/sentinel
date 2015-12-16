@@ -28,6 +28,7 @@ var sendNotification = function (channel, attachment) {
     channel: channel
   }
   return request.post(slackUrl, payload)
+    .catch((err) => {err && log.warn('sentinel', 'failed to send notification to slack')})
 }
 
 var getAttachment = function (failedTests, buildSuccess, isPublic) {
